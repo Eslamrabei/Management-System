@@ -1,0 +1,136 @@
+@model IEnumerable<EmployeesDto>
+@{
+    ViewData["Title"] = "Employees";
+}
+
+<partial name="_ToastsPartialView"></partial>
+
+
+<section class="container mt-4">
+
+    <!-- Header + Create Button -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-2">
+        <h3 class="d-flex align-items-center gap-2 text-primary">
+            <i class="fa-solid fa-users"></i> All Employees
+        </h3>
+        <a class="btn btn-success d-flex align-items-center gap-1 shadow-sm" asp-action="Create">
+            <i class="fa-solid fa-plus"></i> Create Employee
+        </a>
+    </div>
+
+    <!-- Search Form -->
+    <div class="card shadow-sm mb-4 border-0 rounded-3">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-2">
+                <div class="col-md-9">
+                    <input class="form-control border-primary" type="text" name="EmployeeSearchName"
+                           placeholder="🔍 Search Employee by Name" id="searchInp" data-controllers="Employees"
+                           data-action="Search" data-param="EmployeeSearchName" />
+                </div>
+                <div class="col-md-3 d-grid">
+                    <button type="submit" class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-1">
+                        <i class="fa-solid fa-search"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Employee Table -->
+    @if (Model.Any())
+    {
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-hover align-middle text-center mb-0">
+                <thead class="table-primary text-white">
+                    <tr>
+                        <th>@Html.DisplayNameFor(e => e.ImageName)</th>
+                        <th>@Html.DisplayNameFor(e => e.Name)</th>
+                        <th>@Html.DisplayNameFor(e => e.Email)</th>
+                        <th>@Html.DisplayNameFor(e => e.EmployeeType)</th>
+                        <th>@Html.DisplayNameFor(e => e.Age)</th>
+                        <th>@Html.DisplayNameFor(e => e.Department)</th>
+                        <th>@Html.DisplayNameFor(e => e.Salary)</th>
+                        <th>@Html.DisplayNameFor(e => e.IsActive)</th>
+                        <th>@Html.DisplayNameFor(e => e.Gender)</th>
+                        <th colspan="3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-light">
+                    @foreach (var employee in Model)
+                    {
+                        <tr class="align-middle">
+                            <td>
+                                <img class="rounded-circle shadow-sm" width="45" height="45"
+                                     src="~/Files/Images/@(employee.ImageName ?? "user.png")"
+                                     style="object-fit:cover;" alt="Profile Image" />
+                            </td>
+                            <td class="fw-bold text-dark">@employee.Name</td>
+                            <td>@employee.Email</td>
+                            <td class="text-info">@employee.EmployeeType</td>
+                            <td>@employee.Age</td>
+                            <td>@(employee.Department ?? "No Dept")</td>
+                            <td class="text-success fw-bold">@employee.Salary.ToString("C")</td>
+                            <td>
+                                <span class="badge @(employee.IsActive ? "bg-success" : "bg-danger") px-2 py-1">
+                                    @(employee.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                            <td>@employee.Gender</td>
+
+                            <partial name="ButtonsPartialView" model="@employee.Id.ToString()" />
+                            <div class="modal fade" id="deleteModal-@employee.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete User</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are You Sure to Delete this User With Name : @employee.Name?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form method="post" asp-action="Delete" asp-controller="Employees" asp-route-id="@employee.Id" class="mt-4">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <input type="submit" value="Delete" class="btn btn-danger" />
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center shadow-sm rounded">
+            <i class="fa-solid fa-circle-info"></i> No Employees Found!
+        </div>
+    }
+</section>
+
+
+<script>
+    $(document).ready(function () {
+        const searchBar = $('#searchInp');
+        const table = $('table');
+
+        searchBar.on('keyup', function (event) {
+            var searchValue = searchBar.val();
+
+            $.ajax({
+                url: '/Employees/Search',
+                type: 'Get',
+                data: { EmployeeSearchName: searchValue },
+                success: function (result) {
+                    table.html(result);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>

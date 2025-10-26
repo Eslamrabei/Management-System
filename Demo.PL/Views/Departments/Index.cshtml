@@ -1,0 +1,115 @@
+﻿@using RouteG03.BLL.Dtos.DepartmentsDtos
+@model IEnumerable<DepartmentsDto>
+
+@{
+    ViewData["Title"] = "Departments";
+}
+
+<partial name="_ToastsPartialView"></partial>
+
+
+<section class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3><i class="fa-solid fa-building"></i> All Departments</h3>
+        <a class="btn btn-primary" asp-action="Create">
+            <i class="fa-solid fa-plus"></i> Create Department
+        </a>
+    </div>
+
+    <!-- 🔍 Search Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-2">
+                <div class="col-md-9">
+                    <input class="form-control" type="text" name="DepartmentSearchName"
+                           placeholder="🔍 Search Department by Name" id="searchInp" data-controller="Departments"
+                           data-action="Search" data-param="DepartmentSearchName" />
+                </div>
+                <div class="col-md-3 d-grid">
+                    <button type="submit" class="btn btn-outline-success">
+                        <i class="fa-solid fa-search"></i> Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 📋 Departments Table -->
+    @if (Model.Any())
+    {
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-hover align-middle text-center mb-0" ">
+                <thead class="table-primary text-white">
+                    <tr>
+                        <th>@Html.DisplayNameFor(d => d.Code)</th>
+                        <th>@Html.DisplayNameFor(d => d.Name)</th>
+                        <th>@Html.DisplayNameFor(d => d.Description)</th>
+                        <th>@Html.DisplayNameFor(d => d.DateOfCreation)</th>
+                        <th colspan="3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var department in Model)
+                    {
+                        <tr>
+                            <td>@department.Code</td>
+                            <td>@department.Name</td>
+                            <td>@department.Description</td>
+                            <td>@department.DateOfCreation</td>
+
+                            <partial name="ButtonsPartialView" model="@department.Id.ToString()" />
+                            <div class="modal fade" id="deleteModal-@department.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete User</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are You Sure to Delete this User With Name : @department.Name?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form method="post" asp-action="Delete" asp-controller="Departments" asp-route-id="@department.Id" class="mt-4">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <input type="submit" value="Delete" class="btn btn-danger" />
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center shadow-sm">
+            <i class="fa-solid fa-circle-info"></i> No Departments Found!
+        </div>
+    }
+</section>
+
+<script>
+    $(document).ready(function () {
+        const searchBar = $('#searchInp');
+        const table = $('table');
+
+        searchBar.on('keyup', function (event) {
+            var searchValue = searchBar.val();
+
+            $.ajax({
+                url: '/Departments/Search',
+                type: 'Get',
+                data: { DepartmentSearchName: searchValue },
+                success: function (result) {
+                    table.html(result);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>

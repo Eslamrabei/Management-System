@@ -1,0 +1,27 @@
+﻿
+<div class="text-center mb-4">
+    <img src="~/Files/Images/@(Model.Image ?? "user.jpg")"
+         class="rounded-circle shadow"
+         style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #ddd;" />
+
+    <div class="d-flex justify-content-center gap-2 mt-3">
+        <!-- Delete Image -->
+        <form asp-controller="Employees" asp-action="DeleteImg" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-trash3"></i> Delete
+            </button>
+        </form>
+
+        <!-- Update Image -->
+        <form asp-action="UpdateImg" asp-route-id="@Model.Id" enctype="multipart/form-data" method="post" class="d-inline">
+            <div class="input-group input-group-sm" style="max-width: 250px;">
+                <input type="file" name="photo" class="form-control form-control-sm" />
+                <button type="submit" class="btn btn-outline-warning">
+                    <i class="bi bi-upload"></i> Update
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

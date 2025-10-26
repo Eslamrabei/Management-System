@@ -1,0 +1,140 @@
+@model EmployeeDetailsDto
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-primary text-white text-center">
+            <h3 class="mb-0">Employee Details</h3>
+        </div>
+        <div class="mx-1 w-100">
+            <img width="100" class="ms-3" height="100" src="~/Files/Images/@(Model.ImageName != null ? Model.ImageName : "user.png")" />
+        </div>
+        <div class="card-body p-4">
+
+            <!-- Nav Tabs -->
+            <ul class="nav nav-tabs" id="EmployeeTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="general-tab" data-bs-toggle="tab"
+                       href="#general" role="tab" aria-controls="general" aria-selected="true">
+                        <i class="bi bi-person-badge"></i> General
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="administration-tab" data-bs-toggle="tab"
+                       href="#administration" role="tab" aria-controls="administration" aria-selected="false">
+                        <i class="bi bi-gear"></i> Administration
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content mt-3" id="myTabContent">
+
+                <!-- General Tab -->
+                <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-person"></i> Name</label>
+                            <p class="form-control">@Model.Name</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-calendar"></i> Age</label>
+                            <p class="form-control">@Model.Age</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-geo-alt"></i> Address</label>
+                            <p class="form-control">@Model.Address</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-currency-dollar"></i> Salary</label>
+                            <p class="form-control text-success fw-bold">$@Model.Salary</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-envelope"></i> Email</label>
+                            <p class="form-control">@Model.Email</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-telephone"></i> Phone</label>
+                            <p class="form-control">@Model.PhoneNumber</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-calendar-check"></i> Hiring Date</label>
+                            <p class="form-control">@Model.HiringDate.ToShortDateString()</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-briefcase"></i> Employee Type</label>
+                            <p class="form-control">@Model.EmployeeType</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-gender-ambiguous"></i> Gender</label>
+                            <p class="form-control">@Model.Gender</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-check-circle"></i> Status</label>
+                            <p class="form-control-plaintext">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactive</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Administration Tab -->
+                <div class="tab-pane fade" id="administration" role="tabpanel" aria-labelledby="administration-tab">
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-person-circle"></i> Created By</label>
+                            <p class="form-control-plaintext">@Model.CreatedBy</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-clock"></i> Created On</label>
+                            <p class="form-control-plaintext">@Model.CreatedOn</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-pencil"></i> Last Modified By</label>
+                            <p class="form-control-plaintext">@Model.LastModifiedBy</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold"><i class="bi bi-clock-history"></i> Last Modified On</label>
+                            <p class="form-control-plaintext">@Model.LastModifiedOn</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-4 text-end">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success px-4 me-2">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <!--<ItemGroup>
+    <PackageReference Include="AutoMapper" Version="15.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Demo.DAL\Demo.DAL.csproj" />
+  </ItemGroup>-->
+
+	<ItemGroup>
+		<!-- This reference gives access to the concrete FormFile implementation -->
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="15.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Demo.DAL\Demo.DAL.csproj" />
+	</ItemGroup>
+
+
+</Project>
